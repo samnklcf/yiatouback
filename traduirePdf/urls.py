@@ -32,10 +32,7 @@ urlpatterns = [
     path('creation-2f416677-858f-796a-a221-690e5e4ae75a2f416677-858f-796a-a221-690e5e4ae75a', UserCreateView.as_view(), name='user-create'),
     path("api/", include('api.urls')),
     path("categorie/", get_categorie, name=""),
-    path("data/corrections", get_corrections, name=""),
-    path("data/documents", get_documents, name=""),
-    path("data/blog", get_blog, name=""),
-    path("data/marketing/<int:pk>", get_one),
+    
     path("create-shop/",shop),
     path("create-request/",Requete),
     path('sam/', include('rest_framework.urls')),
