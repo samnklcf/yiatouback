@@ -1,8 +1,8 @@
-#DOCUMENTATION DU BACKEND DE YIATOU
+# DOCUMENTATION DU BACKEND DE YIATOU
 
-##I- Authentification et création de compte yiatou.
+## I- Authentification et création de compte yiatou.
 
-Création de compte :
+###  Création de compte :
 Pour créer un nouveau compte, vous devez envoyer une requête POST à l'endpoint /creation-2f416677-858f-796a-a221-690e5e4ae75a2f416677-858f-796a-a221-690e5e4ae75a. Dans le corps de la requête, vous devez inclure les champs suivants :
 
 username (obligatoire) : le nom d'utilisateur
@@ -59,7 +59,7 @@ Exemple de code en utilisant Fetch pour créer un compte :
 
 La réponse renverra un objet JSON avec un jeton d'accès (access) qui sera utilisé pour les requêtes ultérieures. C'est ce token qu'on récupère avec "Cookies.set". Mais le développeur front end peut aussi utiliser le localstorage pour enregistrer ce token.
 
-Authentification :
+### Authentification :
 Pour se connecter à un compte existant, vous devez envoyer une requête POST à l'endpoint /token-auth/. Dans le corps de la requête, vous devez inclure les champs suivants :
 
 username (obligatoire) : le nom d'utilisateur
