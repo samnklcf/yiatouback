@@ -1,3 +1,7 @@
+#DOCUMENTATION DU BACKEND DE YIATOU
+
+##I- Authentification et création de compte yiatou.
+
 Création de compte :
 Pour créer un nouveau compte, vous devez envoyer une requête POST à l'endpoint /creation-2f416677-858f-796a-a221-690e5e4ae75a2f416677-858f-796a-a221-690e5e4ae75a. Dans le corps de la requête, vous devez inclure les champs suivants :
 
