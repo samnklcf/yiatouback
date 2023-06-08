@@ -1,8 +1,4 @@
-aiohttp
-aiosignal
 asgiref
-async-timeout
-asyncio
 attrs
 certifi
 cffi
@@ -13,10 +9,9 @@ dj-rest-auth
 Django
 django-cors-headers
 django-filter
-django-rest-knox
 djangorestframework
 djangorestframework-simplejwt
-frozenlist
+frozenlist 
 gunicorn
 idna
 Markdown
