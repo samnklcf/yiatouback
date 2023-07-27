@@ -6,6 +6,8 @@ from .models import User, PasswordResets, UserProfile
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
+from organization.models import Organization
+
 class RegisterUserSerializer(ModelSerializer):
     last_name = serializers.CharField(required=False, allow_blank=True, allow_null=True, label=_('Last name'))
     first_name = serializers.CharField(required=False, allow_blank=True, allow_null=True, label=_('First name'))
@@ -85,8 +87,22 @@ class RegisterUserSerializer(ModelSerializer):
 
         if validated_data.get('is_organizer') is True:
             name = validated_data.get('organization_name')
-            type = OrganizationType.objects.get(pk=validated_data.get('organization_type'))
-            organization = Organization.objects.create(name=name, type=type)
+            organization = Organization.objects.create(name=name)
             organization.owner.add(user)
 
         return user
+    
+class UserSerializer(ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = (
+            'id', 
+            'last_name', 
+            'first_name', 
+            'username', 
+            'email', 
+            'is_active', 
+            'is_verified',
+            'is_organizer',
+        )
