@@ -109,4 +109,15 @@ class FacebookLogin(SocialLoginView):
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
+class PasswordConfirmationView(GenericAPIView):
+    """ Password confirmation view """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = PasswordConfirmationSerializer
 
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        return Response({
+            "message": "Password confirmed successfully.",
+        }, status=status.HTTP_200_OK)

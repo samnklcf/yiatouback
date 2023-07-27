@@ -3,7 +3,8 @@ from .views import (
     CreateUserAccountView,
     LoginUserView,
     FacebookLogin, 
-    GoogleLogin
+    GoogleLogin,
+    PasswordConfirmationView
 )
 
 # app_name = 'user'
@@ -14,4 +15,6 @@ urlpatterns = [
 
     path('auth/google', GoogleLogin.as_view(), name='google_auth'),
     path('auth/facebook', FacebookLogin.as_view(), name='facebook_auth'),
+
+    path('password/confirm/', PasswordConfirmationView.as_view(), name='password_confirmation'),
 ]
