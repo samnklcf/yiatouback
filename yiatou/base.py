@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django.conf',
     'import_export',
+
+    'drf_yasg',
     
     'allauth',
     'allauth.account',
