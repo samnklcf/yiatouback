@@ -3,6 +3,8 @@ from django.db import models
 from random import randint
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import (BaseUserManager, AbstractBaseUser)
+from django.utils.translation import gettext_lazy as _
+import uuid
 
 def generate_code():
     n = 6
@@ -23,7 +25,7 @@ class UserManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
-        
+
         return user
 
     def create_user(self, email, password=None, **extra_fields):
@@ -44,14 +46,15 @@ class UserManager(BaseUserManager):
     
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email instead of username"""
-    last_name = models.CharField(max_length=255, blank=True, null=True)
-    first_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(max_length=255, unique=True)
-    username = models.CharField(max_length=255, unique=True, null=True)
-    is_verified = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_organizer = models.BooleanField(blank=True, null=True, default=False)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    last_name = models.CharField(_('last name'), max_length=255, blank=True, null=True)
+    first_name = models.CharField(_('first name'), max_length=255, blank=True, null=True)
+    email = models.EmailField(_('email address'), max_length=255, unique=True)
+    username = models.CharField(_('username'), max_length=255, unique=True, null=True)
+    is_verified = models.BooleanField(_('verified'), default=False)
+    is_active = models.BooleanField(_('active'), default=True)
+    is_staff = models.BooleanField(_('staff'), default=False)
+    is_organizer = models.BooleanField(_('is organizer'), blank=True, null=True, default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -85,6 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
 class UserProfile(models.Model):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     about_me = models.TextField(blank=True, null=True)
     image = models.URLField(blank=True, null=True)
     user = models.OneToOneField(User, related_name='user_profile', on_delete=models.CASCADE)
