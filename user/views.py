@@ -1,3 +1,7 @@
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from dj_rest_auth.registration.views import SocialLoginView
+
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from user.models import User, PasswordResets, UserProfile
@@ -98,3 +102,11 @@ class LoginUserView(GenericAPIView):
             'refresh_token': str(token),
             'user': data,
         }, status=status.HTTP_200_OK)
+    
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
+
+
