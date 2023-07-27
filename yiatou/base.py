@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'import_export',
 
     'drf_yasg',
+
+    'rest_framework.authtoken',
     
     'allauth',
     'allauth.account',
@@ -58,7 +60,19 @@ AUTH_USER_MODEL = 'user.User'
 #User model default location
 USER_MODELS_LOCATION = 'user.models'
 
+TOKEN_MODEL = 'None'
+
 SITE_ID = 1
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'jwt-auth'
+
+ACCOUNT_EMAIL_VERIFICATION ='none'
+
+# DJANGO ALLAUTH 
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
