@@ -121,3 +121,125 @@ class PasswordConfirmationView(GenericAPIView):
         return Response({
             "message": "Password confirmed successfully.",
         }, status=status.HTTP_200_OK)
+
+class GetUserInfosView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        user = request.user
+        
+        data = {
+            "id": user.id,
+            "last_name": user.last_name,
+            "first_name": user.first_name,
+            "email": user.email,
+            "username": user.username,
+            "is_verified": user.is_verified,
+            "is_active": user.is_active,
+            "is_organizer": user.is_organizer,
+            "profile": UserProfile.objects.filter(user=user).values(
+                "id", "about_me", "image"
+            ),
+            "organization": OrganizationSerializer(Organization.objects.filter(owner=user), many=True).data
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
+
+class UpdateUserAccountInfosView(GenericAPIView):
+    """ Password forgot view """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdateUserAccountInfosSerializer
+
+    def post(self, request):
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user.last_name = request.data.get('last_name', None)
+        user.first_name = request.data.get('first_name', None)
+        user.email = request.data.get('email', None)
+        user.username = request.data.get('username', None)
+
+        user.save()
+
+        data = {
+            "id": user.id,
+            "name": user.last_name,
+            "first_name": user.first_name,
+            "email": user.email,
+            "username": user.username
+        }
+
+        return Response({
+            "message": "User data saved successfully",
+            "data": data
+        }, status=status.HTTP_200_OK)
+
+class UpdateUserProfileView(GenericAPIView):
+    """ Update user profile view """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UpdateUserProfileSerializer
+
+    def post(self, request):
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        profile = UserProfile.objects.filter(user=user)
+
+        if profile.exists():
+            profile = profile.get()
+            profile.about_me = request.data.get('about_me', None)
+            profile.save()
+        else:
+            profile = UserProfile.objects.create(
+                about_me=request.data.get('about_me', None),
+                user=user
+            )
+
+        data = {
+            "id": user.id,
+            "last_name": user.last_name,
+            "first_name": user.first_name,
+            "email": user.email,
+            "username": user.username,
+            "profile": {
+                "about_me": profile.about_me,
+                "image": profile.image
+            }
+        }
+
+        return Response({
+            "message": "User profile updated successfully.",
+            "data": data
+        }, status=status.HTTP_200_OK)
+
+class ChangePasswordView(GenericAPIView):
+    """ Change Password view """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+
+    def post(self, request):
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user.set_password(request.data.get('new_password', None))
+        user.save()
+
+        return Response({
+            "message": "Password changed successfully."
+        }, status=status.HTTP_200_OK)
+
+class DeleteUserAccountView(APIView):
+    """ Delete user account view """
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        user = request.user
+        user.is_active=False
+        user.save()
+
+        return Response({
+            "message": "User account deleted successfully."
+        }, status=status.HTTP_200_OK)

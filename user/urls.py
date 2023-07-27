@@ -4,7 +4,12 @@ from .views import (
     LoginUserView,
     FacebookLogin, 
     GoogleLogin,
-    PasswordConfirmationView
+    PasswordConfirmationView,
+    GetUserInfosView,
+    UpdateUserAccountInfosView,
+    UpdateUserProfileView,
+    ChangePasswordView,
+    DeleteUserAccountView
 )
 
 # app_name = 'user'
@@ -17,4 +22,9 @@ urlpatterns = [
     path('auth/facebook', FacebookLogin.as_view(), name='facebook_auth'),
 
     path('password/confirm/', PasswordConfirmationView.as_view(), name='password_confirmation'),
+    path('profile/', GetUserInfosView.as_view(), name='user_account_data'),
+    path('update-account/', UpdateUserAccountInfosView.as_view(), name='update_user_account_data'),
+    path('update-profile/', UpdateUserProfileView.as_view(), name='update_user_profile'),
+    path('password/change/', ChangePasswordView.as_view(), name='change_password'),
+    path('deactivate-account/', DeleteUserAccountView.as_view(), name='deactivate_account'),
 ]
