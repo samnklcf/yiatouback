@@ -85,8 +85,8 @@ class RegisterUserSerializer(ModelSerializer):
 
         if validated_data.get('is_organizer') is True:
             name = validated_data.get('organization_name')
-            type = OrganizationType.objects.get(pk=validated_data.get('organization_type'))
-            organization = Organization.objects.create(name=name, type=type)
-            organization.owner.add(user)
+            #type = OrganizationType.objects.get(pk=validated_data.get('organization_type'))
+            #organization = Organization.objects.create(name=name, type=type)
+            #organization.owner.add(user)
 
         return user

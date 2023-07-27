@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'corsheaders',
     'rest_framework',
+    'django.conf',
+    'import_export',
     
     'allauth',
     'allauth.account',
@@ -45,9 +47,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 
     'user',
+    'organization',
 ]
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 #User model for authentication
 AUTH_USER_MODEL = 'user.User'
@@ -133,7 +134,7 @@ ROOT_URLCONF = 'yiatou.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -186,6 +187,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
+
+MEDIA_URL = '/files/'
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
