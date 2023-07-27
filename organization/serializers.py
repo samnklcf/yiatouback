@@ -13,8 +13,13 @@ class OrganizationSerializer(serializers.ModelSerializer):
             'description',
             'banner',
             'logo',
-            'address',
             'email',
             'contact',
             'owner',
         ]
+
+    def __init__(self, *args, owner=False, **kwargs):
+        if owner != True:
+            self.fields.pop('owner')
+
+        return super().__init__(*args, **kwargs)
