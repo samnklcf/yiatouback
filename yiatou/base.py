@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
     'user',
     'organization',
+    'demand',
 ]
 
 #User model for authentication
