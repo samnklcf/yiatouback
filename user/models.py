@@ -1,4 +1,3 @@
-from re import I
 from django.db import models
 from random import randint
 from django.contrib.auth.models import PermissionsMixin
