@@ -1,47 +1,55 @@
-    function Login() {
-    // Initialisation des états d'erreur et de chargement de la page
-    const [erreur, SetErreur] = useState(false);
-    const [top, SetTop] = useState(false);
+# Yiatour API
+Yiatou API
 
-    // Création de deux références pour stocker les valeurs des champs de connexion
-    const username = useRef();
-    const password = useRef();
+## Installation
 
-    // Fonction pour gérer la soumission du formulaire de connexion
-    const handleForm = async (e) => {
-        e.preventDefault(); // Empêche le comportement par défaut de l'événement de soumission
+- Clone the project:
+```sh
+git clone https://github.com/samnklcf/yiatouback.git
+```
 
-        // Création d'un objet FormData pour stocker les données du formulaire
-        const data = new FormData();
-        data.append("username", username.current.value); // Ajout de la valeur du champ d'identifiant
-        data.append("password", password.current.value); // Ajout de la valeur du champ de mot de passe
-        
-        SetTop(true); // Affichage du spinner de chargement
+- Create your own virtual environment:
 
-        // Envoi de la requête de connexion au serveur avec les données du formulaire
-        let response = await fetch("https://yiatoutest.pythonanywhere.com/api/token", {
-        method: "POST",
-        body: data,
-        });
+```sh
+python3 -m venv venv
+source .venv/Scripts/activate
+```
 
-        // Récupération des données de réponse du serveur
-        let dataUser = await response.json();
+ - Install your requirements
+```sh
+pip install -r requirements.txt
+```
 
-        if (response.ok) { // Si la réponse est valide (status 2xx)
-        // Enregistrement du token d'authentification dans un cookie
-        Cookies.set(
-            "2f416677-858f-796a-a221-690e5e4ae75a-token",
-            JSON.stringify(dataUser),
-            { expires: 7, path: "/" }
-        );
-        
-        // Rechargement de la page
-        window.location.reload();
-        } else { // Si la réponse est invalide (status 404 ou 500)
-        SetErreur(true); // Affichage de l'erreur
-        SetTop(false); // Masquage du spinner de chargement
-        }
-    };
-    }
+ - Make your migrations
+```sh
+python manage.py makemigrations
+python manage.py migrate
+```
 
-    
+ - Create a new superuser
+```sh
+python manage.py createsuperuser
+```
+
+ - Run the server
+```sh
+python manage.py runserver
+```
+
+## Usage
+
+To use the API, you just need to open [Postman](https://www.postman.com/) and then go to the following url:
+
+
+```sh
+http://localhost:8000/v1/the-resource-you-want
+```
+
+## Documentation
+
+You can find the API documentation on :
+```sh
+http://localhost:8000/swagger/
+```
+
+## Happy Coding !!!
