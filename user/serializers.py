@@ -15,21 +15,15 @@ class RegisterUserSerializer(ModelSerializer):
     username = serializers.CharField(required=False, allow_blank=True, label=_('username'))
     password = serializers.CharField(write_only=True, label=_('password'))
     password2 = serializers.CharField(write_only=True, label=_('confirm password'))
-    is_organizer = serializers.BooleanField(required=False, allow_null=True)
-    organization_name = serializers.CharField(required=False, label=_('Organization name'), allow_null=True)
 
     class Meta:
         model = User
-        fields = ['id', 'last_name', 'first_name', 'email', 'username', 'password', 'password2', 'is_organizer', 'organization_name']
+        fields = ['id', 'last_name', 'first_name', 'email', 'username', 'password', 'password2']
         extra_kwargs = {'password': {'write_only': True}, 'password2': {'write_only': True}}
 
     def validate(self, data):
         # Check if the user is not a organizer then not allow to create an account with the same email
-        if User.objects.filter(email=data['email']).exists() and data['is_organizer'] is False:
-            raise serializers.ValidationError("User with that email address already exists.")
-        
-        # Check if the user is a organizer then not allow to create an account with the same email
-        elif User.objects.filter(email=data['email'], is_organizer=True).exists():
+        if User.objects.filter(email=data['email']).exists() :
             raise serializers.ValidationError("User with that email address already exists.")
         
         return data
@@ -61,39 +55,18 @@ class RegisterUserSerializer(ModelSerializer):
         return value
     
     def create(self, validated_data):
-        is_organizer = validated_data.get('is_organizer')
-        organization_name = validated_data.get('organization_name')
-
-        if is_organizer is True and organization_name is None:
-            raise serializers.ValidationError("Organization account should have an organization name to propose.")
-
         password = validated_data.pop('password', None)
         user = self.Meta.model(
             last_name=validated_data.get('last_name', None),
             first_name=validated_data.get('first_name', None),
             email=validated_data.get('email', None), 
             username=validated_data.get('username', None),
-            is_organizer=validated_data.get('is_organizer', None),
         )
         
         if password is not None:
             user.set_password(password)
 
-        # this part will check if the user already exists or not
-        try:
-            user.save()
-        except IntegrityError as e:
-            existing_user = User.objects.get(email=user.email)
-            # if the user already exists then update the is_organizer (We are in the cas that it's a organizer)
-            if existing_user.id:
-                user = existing_user
-                user.is_organizer = validated_data.get('is_organizer', None)
-                user.save()
-
-        if validated_data.get('is_organizer') is True:
-            name = validated_data.get('organization_name')
-            organization = Organization.objects.create(name=name)
-            organization.owner.add(user)
+        user.save()
 
         return user
     
