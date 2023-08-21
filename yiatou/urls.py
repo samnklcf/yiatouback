@@ -59,6 +59,7 @@ urlpatterns = [
 
     path(f'{BASE_PATH}/users/', include('user.urls')),
     path(f'{BASE_PATH}/organizations/', include('organization.urls')),
+    path(f'{BASE_PATH}/demands/', include('demand.urls')),
 
     # django all auth
     url(r'^accounts/', include('allauth.urls'), name='socialaccount_signup'),
